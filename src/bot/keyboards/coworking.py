@@ -17,7 +17,7 @@ def coworking_subscription(subscribed: bool) -> types.InlineKeyboardMarkup:
         builder.row(
             types.InlineKeyboardButton(
                 text=_("Отписаться"),
-                callback_data=SubscriptionCallback(subscribed=False).pack(),
+                callback_data=SubscriptionCallback(subscribed=True).pack(),
             )
         )
     else:

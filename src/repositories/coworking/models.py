@@ -3,6 +3,7 @@ import typing as tp
 import datetime as dt
 
 COWORKING_STATUS = tp.Literal["open", "close"]
+COWORKING_ACTIONS = tp.Literal["open", "close", "gain_control"]
 
 
 @dataclass
@@ -15,16 +16,17 @@ class CoworkingStatus:
         упоминание ответственного за коворкинг
     status : COWORKING_STATUS
         open/close
-    duration: datetime.datetime
-        время, на которое закрыт коворкинг
+    duration: int
+        время, на которое закрыт коворкинг (в минутах)
     time: datetime.datetime
         время, когда был установлен статус
     """
 
     OPEN = "open"
     CLOSE = "close"
+    GAIN_CONTROL = "gain_control"
 
     responsible_mention: str
     status: tp.Annotated[str, COWORKING_STATUS]
-    duration: tp.Optional[int] 
+    duration: tp.Optional[int]
     time: dt.datetime

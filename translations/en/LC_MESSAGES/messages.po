@@ -1,14 +1,14 @@
 # English translations for PROJECT.
-# Copyright (C) 2023 ORGANIZATION
+# Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-12-31 15:40+0300\n"
-"PO-Revision-Date: 2023-12-31 15:40+0300\n"
+"POT-Creation-Date: 2024-03-23 21:14+0300\n"
+"PO-Revision-Date: 2024-02-05 23:44+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -16,33 +16,576 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.1\n"
+"Generated-By: Babel 2.14.0\n"
 
-#: src/bot/handlers/common.py:30
+#: src/bot/handlers/club.py:26
+msgid "clubs menu text"
+msgstr ""
+
+#: src/bot/handlers/club.py:49
+msgid "club info {description} {link}"
+msgstr ""
+
+#: src/bot/handlers/club.py:79
+msgid ""
+"club info\n"
+"{description}\n"
+"{link}"
+msgstr ""
+
+#: src/bot/handlers/common.py:43
+msgid ""
+"Вы получили права админисратора\n"
+"    почти в каждом разделе бота есть меню администратора, которое "
+"открывает функции по управлению разделом"
+msgstr ""
+
+#: src/bot/handlers/common.py:49
+msgid "Упс, что-то пошло не так"
+msgstr ""
+
+#: src/bot/handlers/common.py:56
 msgid "Hello , {username}!"
-msgstr "Hello, {username}! I am ITAM Bot which can help you navigate in IT at Misis community"
+msgstr ""
 
-#: src/bot/handlers/coworking.py:20 src/bot/handlers/coworking.py:25
+#: src/bot/handlers/common.py:61 src/bot/handlers/common.py:69
+#: src/bot/handlers/common.py:76
+msgid "Текст главного меню"
+msgstr ""
+
+#: src/bot/handlers/common.py:90 src/bot/handlers/common.py:105
+msgid "Текст помощи на /help для главного меню"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:48
 msgid "coworking menu text"
-msgstr "Main coworking menu (coworking - Г511) with"
+msgstr ""
 
-#: src/bot/keyboards/menu.py:11
-msgid "Coworking inline keyboard button"
-msgstr "💼 Coworking"
+#: src/bot/handlers/coworking.py:88
+msgid "coworking status text if status is None"
+msgstr ""
 
-#: src/bot/keyboards/menu.py:16
-msgid "Settings inline keyboard button"
-msgstr "⚙️ Profile settings"
+#: src/bot/handlers/coworking.py:91
+msgid "coworking closed until {due} {mention}"
+msgstr ""
 
-#: src/bot/keyboards/menu.py:26
-msgid "Coworking info inline keyboard button"
-msgstr "ℹ️  info"
+#: src/bot/handlers/coworking.py:97
+msgid "coworking open {mention}"
+msgstr ""
 
-#: src/bot/keyboards/menu.py:30
-msgid "Coworking status inline keyboard button"
-msgstr "❔ status"
+#: src/bot/handlers/coworking.py:98
+msgid "coworking closed {mention}"
+msgstr ""
 
-#: src/bot/keyboards/menu.py:37
-msgid "Coworking admin menu inline keyboard button"
-msgstr "🦺 change status"
+#: src/bot/handlers/coworking.py:117
+msgid "Ты отписался от уведомлений о статусе коворкинга"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:140
+msgid "Ты подписался на уведомления о статусе коворкинга"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:168
+msgid "coworking admin menu text"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:196
+msgid "Меню администратора для управления статусом ковркинга"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:218
+msgid ""
+"<b>Теперь вы отвественный за коворкинг</b>\n"
+"🟢 Коворкинг ITAM открыт \n"
+"\n"
+"Ответственный: {mention}"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:263
+msgid "Введите время в минутах"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:286
+msgid "Введите валидное число"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:289
+msgid "Открытие коворкинга должно произойти до 20:00"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:325
+msgid ""
+"🔑🔴 Коворкинг ITAM закрыт \n"
+"\n"
+"Ответственный: {mention}"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:340 src/bot/handlers/coworking.py:387
+msgid ""
+"🟢 Коворкинг ITAM открыт \n"
+"\n"
+"Ответственный: {mention}"
+msgstr ""
+
+#: src/bot/handlers/coworking.py:350
+msgid ""
+"🔑🔴 Коворкинг ITAM закрыт на {duration} минут \n"
+"\n"
+"Ответственный: {mention}"
+msgstr ""
+
+#: src/bot/handlers/itam.py:29
+msgid "ITAM menu"
+msgstr ""
+
+#: src/bot/handlers/itam.py:37
+msgid "ITAM contacts"
+msgstr ""
+
+#: src/bot/handlers/profile.py:70
+msgid ""
+"Что ты хочешь отредактировать?\n"
+"\n"
+"<b>ФИО:</b>\n"
+"{fio}\n"
+"<b>Почта:</b>\n"
+"{email}\n"
+"<b>Учебная группа:</b>\n"
+"{group}\n"
+"<b>Ссылка на портфолио:</b>\n"
+"{portfolio}\n"
+"<b>Направления разработки:</b>\n"
+"{majors}\n"
+"<b>Навыки/Стэк технолгий:</b>\n"
+"{skills}\n"
+"<b>Ссылки на соц. сети:</b>\n"
+"{links}\n"
+"<b>Готовность стать ментором:</b>\n"
+"{mentor}\n"
+"<b>Компания:</b>\n"
+"{company}"
+msgstr ""
+
+#: src/bot/handlers/profile.py:73 src/bot/handlers/profile.py:74
+#: src/bot/handlers/profile.py:77 src/bot/handlers/profile.py:80
+#: src/bot/handlers/profile.py:83 src/bot/handlers/profile.py:86
+#: src/bot/handlers/profile.py:89 src/bot/handlers/profile.py:91
+#: src/bot/handlers/profile.py:101 src/bot/handlers/profile.py:102
+#: src/bot/handlers/profile.py:105 src/bot/handlers/profile.py:108
+#: src/bot/handlers/profile.py:111 src/bot/handlers/profile.py:114
+#: src/bot/handlers/profile.py:117 src/bot/handlers/profile.py:119
+msgid "Не указано"
+msgstr ""
+
+#: src/bot/handlers/profile.py:90 src/bot/handlers/profile.py:118
+msgid "Yes"
+msgstr ""
+
+#: src/bot/handlers/profile.py:90 src/bot/handlers/profile.py:118
+msgid "No"
+msgstr ""
+
+#: src/bot/handlers/profile.py:94 src/bot/handlers/profile.py:122
+msgid ""
+"Профиль не заполнен(\n"
+"Что ты хочешь отредактировать?"
+msgstr ""
+
+#: src/bot/handlers/profile.py:98
+msgid ""
+"<b>⚙️ Профиль</b>\n"
+"\n"
+"<b>ФИО:</b>\n"
+"{fio}\n"
+"<b>Почта:</b>\n"
+"{email}\n"
+"<b>Учебная группа:</b>\n"
+"{group}\n"
+"<b>Ссылка на портфолио:</b>\n"
+"{portfolio}\n"
+"<b>Направления разработки:</b>\n"
+"{majors}\n"
+"<b>Навыки/Стэк технолгий:</b>\n"
+"{skills}\n"
+"<b>Ссылки на соц. сети:</b>\n"
+"{links}\n"
+"<b>Готовность стать ментором:</b>\n"
+"{mentor}\n"
+"<b>Компания:</b>\n"
+"{company}\n"
+"\n"
+msgstr ""
+
+#: src/bot/handlers/profile.py:128 src/bot/handlers/profile.py:229
+#: src/bot/handlers/profile.py:355
+msgid "ProfileMenu text"
+msgstr ""
+
+#: src/bot/handlers/profile.py:148
+msgid "Error"
+msgstr ""
+
+#: src/bot/handlers/profile.py:156
+msgid "Введи свое ФИО через пробел"
+msgstr ""
+
+#: src/bot/handlers/profile.py:160
+msgid "Введи свой email в домене edu.misis.ru"
+msgstr ""
+
+#: src/bot/handlers/profile.py:164
+msgid "Введи свою учебную группу (пример: БИВТ)"
+msgstr ""
+
+#: src/bot/handlers/profile.py:168
+msgid "Ссылка на портфолио с проектами (github/gitlab/notion/etc...)"
+msgstr ""
+
+#: src/bot/handlers/profile.py:174
+msgid "Выбери направления разработки, в которых ты специализируешься"
+msgstr ""
+
+#: src/bot/handlers/profile.py:178
+msgid "Выбери стек технологий с которымы ты хорошо знаком"
+msgstr ""
+
+#: src/bot/handlers/profile.py:182
+msgid "Тут ты можешь оставить дополнительные ссылки на соцсети / резюме"
+msgstr ""
+
+#: src/bot/handlers/profile.py:188
+msgid "Готов ли ты стать ментором"
+msgstr ""
+
+#: src/bot/handlers/profile.py:192
+msgid "Введи название компании, в которой ты работаешь, и должность (если есть)"
+msgstr ""
+
+#: src/bot/handlers/profile.py:254
+msgid "Данные сохранены"
+msgstr ""
+
+#: src/bot/handlers/profile.py:291 src/bot/handlers/profile.py:308
+#: src/bot/handlers/profile.py:333
+msgid "Меню администратора"
+msgstr ""
+
+#: src/bot/handlers/profile.py:328
+msgid ""
+"Ссылка для добавление администратора (действительна 30 минут): \n"
+" {url}"
+msgstr ""
+
+#: src/bot/handlers/profile.py:351
+msgid "ProfileForm cancel message"
+msgstr ""
+
+#: src/bot/handlers/profile.py:380
+msgid "ProfileForm error fio state"
+msgstr ""
+
+#: src/bot/handlers/profile.py:400
+msgid "ProfileForm error email state"
+msgstr ""
+
+#: src/bot/handlers/profile.py:431
+msgid "ProfileForm error group state"
+msgstr ""
+
+#: src/bot/handlers/profile.py:457
+msgid "ProfileForm error github state"
+msgstr ""
+
+#: src/bot/handlers/profile.py:525
+msgid "ProfileForm error skills state"
+msgstr ""
+
+#: src/bot/handlers/profile.py:549
+msgid "Не смог открыть ссылку: {url}"
+msgstr ""
+
+#: src/bot/handlers/profile.py:584
+msgid "ProfileForm error company state"
+msgstr ""
+
+#: src/bot/keyboards/clubs.py:18 src/bot/keyboards/coworking.py:19
+#: src/bot/keyboards/menu.py:90
+msgid "Отписаться"
+msgstr ""
+
+#: src/bot/keyboards/clubs.py:25 src/bot/keyboards/coworking.py:26
+#: src/bot/keyboards/menu.py:97
+msgid "Подписаться"
+msgstr ""
+
+#: src/bot/keyboards/clubs.py:31
+msgid "📢 Чат клуба"
+msgstr ""
+
+#: src/bot/keyboards/clubs.py:37 src/bot/keyboards/coworking.py:32
+#: src/bot/keyboards/coworking_admin.py:21
+#: src/bot/keyboards/coworking_admin.py:103 src/bot/keyboards/itam.py:41
+#: src/bot/keyboards/itam.py:66 src/bot/keyboards/menu.py:103
+#: src/bot/keyboards/menu.py:147 src/bot/keyboards/profile.py:125
+#: src/bot/keyboards/profile.py:209 src/bot/keyboards/profile.py:227
+#: src/bot/keyboards/profile.py:246 src/bot/keyboards/profile.py:275
+#: src/bot/keyboards/profile.py:312
+msgid "↩️ Назад"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:36
+#: src/bot/keyboards/coworking_admin.py:46
+#: src/bot/keyboards/coworking_admin.py:93
+msgid "Открыть коворкинг"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:40
+msgid "Coworking admin status change to close inline keyboard button"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:58
+msgid "Взять ответственность на себя"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:65
+msgid "Закрыть до завтра"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:72
+msgid "🚧 на 30 минут"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:78
+msgid "🚧 на 60 минут"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:84
+msgid "Ввести время"
+msgstr ""
+
+#: src/bot/keyboards/coworking_admin.py:97
+msgid "Закрыть коворкинг"
+msgstr ""
+
+#: src/bot/keyboards/itam.py:23
+msgid "📰 Дайджест"
+msgstr ""
+
+#: src/bot/keyboards/itam.py:29
+msgid "🚀 Наши возможности"
+msgstr ""
+
+#: src/bot/keyboards/itam.py:35
+msgid "📞 Контакты"
+msgstr ""
+
+#: src/bot/keyboards/itam.py:53
+msgid "Отписаться от дайджеста"
+msgstr ""
+
+#: src/bot/keyboards/itam.py:60
+msgid "Подписаться на дайджест"
+msgstr ""
+
+#: src/bot/keyboards/itam.py:73
+msgid "🔧 Администрирование"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:39
+msgid "👥 Коворкинг"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:45
+msgid "🤍 ITAM"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:51
+msgid "🏢 Клубы"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:57
+msgid "⚙️ Профиль"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:76
+msgid "ℹ️ О коворкинге"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:83
+msgid "📝 Статус"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:110
+msgid "🔧 Меню администратора"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:121
+msgid "🖥️ Хакатон клуб"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:125
+msgid "🎨 Design клуб"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:131
+msgid "🎮 Gamedev клуб"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:135
+msgid "🧠 AI Knowledge клуб"
+msgstr ""
+
+#: src/bot/keyboards/menu.py:141
+msgid "🤖 Клуб робототехники"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:118
+msgid "🤷‍♂️ Изменить данные"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:132
+msgid "🦺 Меню администратора"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:146
+msgid "ФИО"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:152
+msgid "Почта @edu.misis.ru"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:158
+msgid "Учебная группа"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:166
+msgid "Ссылка на портфолио"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:174
+msgid "Направления разработки"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:180
+msgid "Навыки/Стэк технологий"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:186
+msgid "Ссылки на соц. сети"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:194
+msgid "Менторство"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:202
+msgid "Компания"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:253
+msgid "Подтвердить"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:263
+msgid "✅ Готов помогать"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:269
+msgid "❌ Не готов помогать"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:294
+msgid "Экспортировать"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:300
+msgid "Добавить админа"
+msgstr ""
+
+#: src/bot/keyboards/profile.py:306
+msgid "Изменить статус"
+msgstr ""
+
+#~ msgid ""
+#~ "Вы получили права админисратора\n"
+#~ "почти в каждом разделе бота есть "
+#~ "меню администратора, которое открывает функции"
+#~ " по управлению разделом"
+#~ msgstr ""
+
+#~ msgid "coworking info text"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Подписавшись на обновления тебе будут "
+#~ "приходить уведомление о статусе коворкинга"
+#~ msgstr ""
+
+#~ msgid "Coworking admin status close durations selection"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Что ты хочешь отредактировать?\n"
+#~ "\n"
+#~ "<b>ФИО:</b>\n"
+#~ "{fio}\n"
+#~ "\n"
+#~ "<b>Почта:</b>\n"
+#~ "{email}\n"
+#~ "<b>Учебная группа:</b>\n"
+#~ "{group}\n"
+#~ "<b>Ссылка на github:</b>\n"
+#~ "{portfolio}\n"
+#~ "<b>Сферы:</b>\n"
+#~ "{majors}\n"
+#~ "<b>Навыки:</b>\n"
+#~ "{skills}\n"
+#~ "<b>Ссылки:</b>\n"
+#~ "{links}\n"
+#~ "<b>Готовность стать ментором:</b>\n"
+#~ "{mentor}"
+#~ msgstr ""
+
+#~ msgid "Введи свое фио через пробел"
+#~ msgstr ""
+
+#~ msgid "Выбери сферы в которых ты специализируешься"
+#~ msgstr ""
+
+#~ msgid "ProfileForm error profession state"
+#~ msgstr ""
+
+#~ msgid "ProfileForm error mentor state"
+#~ msgstr ""
+
+#~ msgid "📢 чат клуба"
+#~ msgstr ""
+
+#~ msgid "ℹ️ Информация"
+#~ msgstr ""
+
+#~ msgid "✉️ Обновления"
+#~ msgstr ""
+
+#~ msgid "🤖 клуб робототехники"
+#~ msgstr ""
+
+#~ msgid "🤷‍♂️ изменить данные"
+#~ msgstr ""
+
+#~ msgid "🦺 меню администратора"
+#~ msgstr ""
+
+#~ msgid "Группа"
+#~ msgstr ""
+
+#~ msgid "Ссылки на проекты"
+#~ msgstr ""
+
+#~ msgid "Стэк технологий"
+#~ msgstr ""
+
+#~ msgid "Ссылки на соц сети"
+#~ msgstr ""
 

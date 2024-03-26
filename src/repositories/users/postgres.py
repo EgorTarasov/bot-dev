@@ -32,7 +32,8 @@ class UserRepositoryPostgres(UserRepositoryBase):
                         pr.majors,
                         pr.external_links,
                         pr.skills,
-                        pr.mentor
+                        pr.mentor,
+                        pr.company
                     from telegram_users as tg
                     left join profiles as pr on tg.id = pr.user_id
                     where tg.id = %s;
@@ -58,6 +59,7 @@ class UserRepositoryPostgres(UserRepositoryBase):
                 external_links,
                 skills,
                 mentor_status,
+                company,
             ) = result
 
             return TelegramUser(
@@ -77,6 +79,7 @@ class UserRepositoryPostgres(UserRepositoryBase):
                     external_links=external_links,
                     skills=skills,
                     mentor_status=mentor_status,
+                    company=company,
                 ),
             )
         # select only user data
@@ -138,7 +141,8 @@ class UserRepositoryPostgres(UserRepositoryBase):
                     pr.majors,
                     pr.external_links,
                     pr.skills,
-                    pr.mentor
+                    pr.mentor,
+                    pr.company
                 from telegram_users as tg
                 left join profiles as pr on tg.id = pr.user_id
                 limit %s offset %s;
@@ -165,6 +169,7 @@ class UserRepositoryPostgres(UserRepositoryBase):
                     external_links=external_links,
                     skills=skills,
                     mentor_status=mentor_status,
+                    company=company,
                 ),
             )
             for (
@@ -183,6 +188,7 @@ class UserRepositoryPostgres(UserRepositoryBase):
                 external_links,
                 skills,
                 mentor_status,
+                company,
             ) in result
         ]
 
@@ -344,6 +350,7 @@ class UserRepositoryPostgres(UserRepositoryBase):
         external_links: list[str] | None = None,
         skills: list[str] | None = None,
         mentor_status: bool = False,
+        company: str | None = None,
     ) -> None:
         cur = self.conn.cursor()
         cur.execute(
@@ -367,8 +374,9 @@ class UserRepositoryPostgres(UserRepositoryBase):
                     majors,
                     external_links,
                     skills,
-                    mentor
-                ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+                    mentor,
+                    company
+                ) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
                 """,
                 (
                     tg_id,
@@ -380,6 +388,7 @@ class UserRepositoryPostgres(UserRepositoryBase):
                     external_links,
                     skills,
                     mentor_status,
+                    company,
                 ),
             )
         else:
@@ -394,7 +403,8 @@ class UserRepositoryPostgres(UserRepositoryBase):
                     majors = %s,
                     external_links = %s,
                     skills = %s,
-                    mentor = %s
+                    mentor = %s,
+                    company = %s
                 where user_id = %s;
                 """,
                 (
@@ -406,6 +416,7 @@ class UserRepositoryPostgres(UserRepositoryBase):
                     external_links,
                     skills,
                     mentor_status,
+                    company,
                     tg_id,
                 ),
             )

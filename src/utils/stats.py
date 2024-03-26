@@ -21,6 +21,7 @@ async def users_table(admin_id: int, users: list[TelegramUser]):
         "external_links",
         "skills",
         "mentor_status",
+        "company",
     ]
 
     async with aiofiles.open(filename, "w") as file:

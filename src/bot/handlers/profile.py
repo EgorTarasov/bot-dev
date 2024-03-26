@@ -9,7 +9,7 @@
     7. Навыки — стек технологий в рамках направления
     8. Ссылки — гит, резюме и прочие
     9. Готовность помогать новичкам — готов/не готов
-    10. Уровень навыков (дефолт — неизвестно) — не настраиваемый пользователем параметр, показывающий уровень скиллов
+    10. в какой компании работает
 Подумать насчет экспортом в гугл докс
 И как это хранить в бд?)
 """
@@ -29,16 +29,20 @@ from ..settings import Settings
 from repositories.users.base import UserRepositoryBase
 from utils import users_table, get_admin_invite_link, create_invite_code
 
-from ..keyboards.menu import MainMenuCallback
+from ..keyboards.menu import MainMenuCallback, base_menu_reply_key
 from ..keyboards.profile import (
     ProfileMenuCallback,
     ProfileAdminMenuCallback,
+    MajorCallback,
+    MentorStatusCallback,
     profile_menu_keyboard,
+    mentor_status_keyboard,
     field_selector_menu,
     editing_keyboard,
     admin_menu_keyboard,
     PROFILE_EDITABLE_FIELD,
     AVALIABLE_PROFESSIONS,
+    majors_keyboard,
 )
 from repositories.users.models import TelegramUser
 
@@ -57,13 +61,14 @@ class ProfileForm(StatesGroup):
     skills = State()
     external_links = State()
     mentor_status = State()
+    company = State()
 
 
 # TODO: move to messages block
 def get_editing_text(tg_user: TelegramUser) -> str:
     if tg_user.profile:
         return _(
-            "Что ты хочешь отредактировать?\n\n<b>ФИО:</b>\n{fio}\n\n<b>Почта:</b>\n{email}\n<b>Учебная группа:</b>\n{group}\n<b>Ссылка на github:</b>\n{portfolio}\n<b>Сферы:</b>\n{majors}\n<b>Навыки:</b>\n{skills}\n<b>Ссылки:</b>\n{links}\n<b>Готовность стать ментором:</b>\n{mentor}"
+            "Что ты хочешь отредактировать?\n\n<b>ФИО:</b>\n{fio}\n<b>Почта:</b>\n{email}\n<b>Учебная группа:</b>\n{group}\n<b>Ссылка на портфолио:</b>\n{portfolio}\n<b>Направления разработки:</b>\n{majors}\n<b>Навыки/Стэк технолгий:</b>\n{skills}\n<b>Ссылки на соц. сети:</b>\n{links}\n<b>Готовность стать ментором:</b>\n{mentor}\n<b>Компания:</b>\n{company}"
         ).format(
             fio=tg_user.profile.fio if tg_user.profile.fio else _("Не указано"),
             email=tg_user.profile.email if tg_user.profile.email else _("Не указано"),
@@ -83,16 +88,44 @@ def get_editing_text(tg_user: TelegramUser) -> str:
             if tg_user.profile.external_links
             else _("Не указано"),
             mentor=_("Yes") if tg_user.profile.mentor_status else _("No"),
+            company=tg_user.profile.company if tg_user.profile.company else _("Не указано"),
         )
     else:
         return _("Профиль не заполнен(\nЧто ты хочешь отредактировать?")
 
+def get_profifle_text(tg_user: TelegramUser) -> str:
+    if tg_user.profile:
+        return _(
+            "<b>⚙️ Профиль</b>\n\n<b>ФИО:</b>\n{fio}\n<b>Почта:</b>\n{email}\n<b>Учебная группа:</b>\n{group}\n<b>Ссылка на портфолио:</b>\n{portfolio}\n<b>Направления разработки:</b>\n{majors}\n<b>Навыки/Стэк технолгий:</b>\n{skills}\n<b>Ссылки на соц. сети:</b>\n{links}\n<b>Готовность стать ментором:</b>\n{mentor}\n<b>Компания:</b>\n{company}\n\n"
+        ).format(
+            fio=tg_user.profile.fio if tg_user.profile.fio else _("Не указано"),
+            email=tg_user.profile.email if tg_user.profile.email else _("Не указано"),
+            group=tg_user.profile.educational_group
+            if tg_user.profile.educational_group
+            else _("Не указано"),
+            portfolio=tg_user.profile.portfolio_link
+            if tg_user.profile.portfolio_link
+            else _("Не указано"),
+            majors=", ".join(tg_user.profile.majors)
+            if tg_user.profile.majors
+            else _("Не указано"),
+            skills=", ".join(tg_user.profile.skills)
+            if tg_user.profile.skills
+            else _("Не указано"),
+            links=", ".join(tg_user.profile.external_links)
+            if tg_user.profile.external_links
+            else _("Не указано"),
+            mentor=_("Yes") if tg_user.profile.mentor_status else _("No"),
+            company=tg_user.profile.company if tg_user.profile.company else _("Не указано"),
+        )
+    else:
+        return _("Профиль не заполнен(\nЧто ты хочешь отредактировать?")
 
 @router.callback_query(MainMenuCallback.filter(F.next_menu_prefix == "profile"))
 async def profile_menu_callbacks(
     callback: types.CallbackQuery, tg_user: TelegramUser
 ) -> None:
-    msg_text = _("ProfileMenu text")
+    msg_text = get_profifle_text(tg_user)+_("ProfileMenu text")
 
     markup = profile_menu_keyboard(tg_user.is_admin)
     if not callback.message:
@@ -114,13 +147,13 @@ async def process_editing(
     # FIXME: split into different handlers
     msg_text: str = _("Error")
     markup: types.InlineKeyboardMarkup | types.ReplyKeyboardMarkup | types.ReplyKeyboardRemove | types.ForceReply | None = (
-        types.ReplyKeyboardRemove()
+        base_menu_reply_key()
     )
     if len((await state.get_data()).keys()) == 0:
         await state.update_data(tg_user=tg_user)
     match callback_data.field:
         case "fio":
-            msg_text = _("Введи свое фио через пробел")
+            msg_text = _("Введи свое ФИО через пробел")
             markup = editing_keyboard(next_input=True)
             await state.set_state(ProfileForm.fio)
         case "email":
@@ -138,9 +171,8 @@ async def process_editing(
             markup = editing_keyboard(next_input=True)
             await state.set_state(ProfileForm.portfolio_link)
         case "majors":
-            # TODO: добавить мулти выбор инлайн
-            msg_text = _("Выбери сферы в которых ты специализируешься")
-            markup = editing_keyboard(next_input=True)
+            msg_text = _("Выбери направления разработки, в которых ты специализируешься")
+            markup = majors_keyboard(','.join([key for key, value in AVALIABLE_PROFESSIONS.items() if value in tg_user.profile.majors]) if tg_user.profile.majors else '')
             await state.set_state(ProfileForm.majors)
         case "skills":
             msg_text = _("Выбери стек технологий с которымы ты хорошо знаком")
@@ -150,10 +182,16 @@ async def process_editing(
             msg_text = _(
                 "Тут ты можешь оставить дополнительные ссылки на соцсети / резюме"
             )
+            markup = editing_keyboard(next_input=True)
             await state.set_state(ProfileForm.external_links)
         case "mentor_status":
             msg_text = _("Готов ли ты стать ментором")
+            markup = mentor_status_keyboard()
             await state.set_state(ProfileForm.mentor_status)
+        case "company":
+            msg_text = _("Введи название компании, в которой ты работаешь, и должность (если есть)")
+            markup = editing_keyboard(next_input=True)
+            await state.set_state(ProfileForm.company)
 
     if callback.message:
         if isinstance(markup, types.ReplyKeyboardRemove):
@@ -186,9 +224,9 @@ async def profile_menu(
     user_repo: UserRepositoryBase,
 ) -> None:
 
-    msg_text = _("ProfileMenu text")
-    markup = profile_menu_keyboard()
+    markup = profile_menu_keyboard(tg_user.is_admin)
     tg_user = await sync_profile_data(user_repo, tg_user, await state.get_data())
+    msg_text = get_profifle_text(tg_user)+_("ProfileMenu text")
 
     if callback.message:
         await callback.message.edit_text(msg_text, reply_markup=markup)
@@ -311,7 +349,7 @@ async def cancel_handler(message: types.Message, state: FSMContext) -> None:
     await state.clear()
     await message.answer(
         _("ProfileForm cancel message"),
-        reply_markup=types.ReplyKeyboardRemove(),
+        reply_markup=base_menu_reply_key(),
     )
     await message.answer(
         _("ProfileMenu text"),
@@ -339,7 +377,7 @@ async def process_profile_form_fio(
         await message.answer(msg_text, reply_markup=field_selector_menu())
     else:
         await message.answer(
-            _("ProfileForm error fio state"), reply_markup=types.ReplyKeyboardRemove()
+            _("ProfileForm error fio state"), reply_markup=base_menu_reply_key()
         )
 
 
@@ -360,15 +398,15 @@ async def process_profile_form_email(
     else:
         await message.answer(
             _("ProfileForm error email state"),
-            reply_markup=types.ReplyKeyboardRemove(),
+            reply_markup=base_menu_reply_key(),
         )
 
 
 # TODO: move to utils
 def check_group(group: str) -> bool:
-    if len(group.split("-")) != 3:
+    if len(group.split("-")) < 3:
         return False
-    name, year, number = group.split("-")
+    name = group.split("-")[0]
 
     if not name.startswith(("Б", "М")):
         return False
@@ -391,13 +429,13 @@ async def process_profile_form_group(
     else:
         await message.answer(
             _("ProfileForm error group state"),
-            reply_markup=types.ReplyKeyboardRemove(),
+            reply_markup=base_menu_reply_key(),
         )
 
 
 # TODO: move to utils
 def check_github(github: str) -> bool:
-    if not github.startswith("https://github.com"):
+    if not github.startswith("http"):
         return False
     return True
 
@@ -417,27 +455,75 @@ async def process_profile_form_github(
     else:
         await message.answer(
             _("ProfileForm error github state"),
-            reply_markup=types.ReplyKeyboardRemove(),
+            reply_markup=base_menu_reply_key(),
         )
 
 
-@router.message(ProfileForm.majors)
+# @router.message(ProfileForm.majors)
+# async def process_profile_form_profession(
+#     message: types.Message, state: FSMContext, tg_user: TelegramUser
+# ) -> None:
+#     if message.text and message.text in AVALIABLE_PROFESSIONS:
+#         data = await state.get_data()
+#         data["tg_user"].profile.majors = message.text.split(",")
+#         await state.set_data(data)
+
+#         await state.set_state(ProfileForm.editing)
+#         msg_text = get_editing_text(data["tg_user"])
+#         await message.answer(msg_text, reply_markup=field_selector_menu())
+
+#     else:
+#         await message.answer(
+#             _("ProfileForm error profession state"),
+#             reply_markup=base_menu_reply_key(),
+#         )
+
+@router.callback_query(MajorCallback.filter())
 async def process_profile_form_profession(
-    message: types.Message, state: FSMContext, tg_user: TelegramUser
+    callback: types.CallbackQuery,
+    callback_data: MajorCallback,
+    state: FSMContext,
+    tg_user: TelegramUser,
 ) -> None:
-    if message.text and message.text in AVALIABLE_PROFESSIONS:
+    data = await state.get_data()
+    confirms = callback_data.confirms.split(",") if callback_data.confirms else []
+    # parse actions by value in callback_data
+    if len(callback_data.value.split('_')) > 1:
+        action, value = callback_data.value.split('_')
+        if action == "rm":
+            confirms.remove(value)
+        else:
+            confirms.append(value)
+        # update keyboard
+        confirms = ",".join(confirms)
+        await callback.message.edit_reply_markup(inline_message_id=callback.inline_message_id, reply_markup=majors_keyboard(confirms))
+    else:
+        # extracct values from enum by name in confirms
+        selections = [AVALIABLE_PROFESSIONS[major] for major in confirms]
+        data["tg_user"].profile.majors = selections
+        await state.set_data(data)
+
+        await state.set_state(ProfileForm.editing)
+        msg_text = get_editing_text(data["tg_user"])
+        await callback.message.edit_text(msg_text, reply_markup=field_selector_menu())
+        await callback.answer()
+
+@router.message(ProfileForm.skills)
+async def process_profile_form_skills(
+    message: types.Message, state: FSMContext
+) -> None:
+    if message.text:
         data = await state.get_data()
-        data["tg_user"].profile.majors = message.text.split(",")
+        data["tg_user"].profile.skills = message.text.split(",")
         await state.set_data(data)
 
         await state.set_state(ProfileForm.editing)
         msg_text = get_editing_text(data["tg_user"])
         await message.answer(msg_text, reply_markup=field_selector_menu())
-
     else:
         await message.answer(
-            _("ProfileForm error profession state"),
-            reply_markup=types.ReplyKeyboardRemove(),
+            _("ProfileForm error skills state"),
+            reply_markup=base_menu_reply_key(),
         )
 
 
@@ -465,23 +551,36 @@ async def process_profile_external_links(
             )
         )
 
+@router.callback_query(MentorStatusCallback.filter())
+async def process_mentor_status(
+    callback: types.CallbackQuery,
+    callback_data: MentorStatusCallback,
+    state: FSMContext,
+    tg_user: TelegramUser,
+) -> None:
+    data = await state.get_data()
+    data["tg_user"].profile.mentor_status = callback_data.ready
+    await state.set_data(data)
 
-@router.message(ProfileForm.mentor_status)
-async def process_profile_form_mentor(
+    await state.set_state(ProfileForm.editing)
+    msg_text = get_editing_text(data["tg_user"])
+    await callback.message.edit_text(msg_text, reply_markup=field_selector_menu())
+    await callback.answer()
+
+@router.message(ProfileForm.company)
+async def process_profile_form_company(
     message: types.Message, state: FSMContext
 ) -> None:
-    # TODO: inline buttons
-    if message.text and message.text.lower() in [_("Yes").lower(), _("No").lower()]:
+    if message.text:
         data = await state.get_data()
-        data["tg_user"].profile.mentor_status = message.text == _("Yes").lower()
+        data["tg_user"].profile.company = message.text
         await state.set_data(data)
 
         await state.set_state(ProfileForm.editing)
-
         msg_text = get_editing_text(data["tg_user"])
         await message.answer(msg_text, reply_markup=field_selector_menu())
     else:
         await message.answer(
-            _("ProfileForm error mentor state"),
-            reply_markup=types.ReplyKeyboardRemove(),
+            _("ProfileForm error company state"),
+            reply_markup=base_menu_reply_key(),
         )

@@ -33,7 +33,7 @@ class UserMiddleware(BaseMiddleware):
         data["user_repo"] = self.user_repo
         data["tg_user"] = (
             self.user_repo.get_user(aiogram_user.id, True) if aiogram_user else None
-        )
+        ) # TODO: check if we need to get profile all the time
 
         result = await handler(event, data)
 

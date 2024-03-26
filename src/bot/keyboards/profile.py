@@ -9,7 +9,7 @@
     7. Навыки — стек технологий в рамках направления
     8. Ссылки — гит, резюме и прочие
     9. Готовность помогать новичкам — готов/не готов
-    10. Уровень навыков (дефолт — неизвестно) — не настраиваемый пользователем параметр, показывающий уровень скиллов
+    10. в какой компании работает
 
 Подумать насчет экспортом в гугл докс
 И как это хранить в бд?)
@@ -41,20 +41,33 @@ PROFILE_EDITABLE_FIELD = tp.Literal[
     "skills",
     "external_links",
     "mentor_status",
+    "company",
 ]
 
 
-AVALIABLE_PROFESSIONS = [
-    "Fullstack",
-    "Backend",
-    "Frontend",
-    "GameDev",
-    "Mobile",
-    "DevOps",
-    "ML Engineer",
-    "UI/UX Designer",
-    "Project Manager",
-]
+# AVALIABLE_PROFESSIONS = [
+#     "Fullstack",
+#     "Backend",
+#     "Frontend",
+#     "GameDev",
+#     "Mobile",
+#     "DevOps",
+#     "ML Engineer",
+#     "UI/UX Designer",
+#     "Project Manager",
+# ]
+
+AVALIABLE_PROFESSIONS = {
+    "Flstk": "Fullstack",
+    "Bd": "Backend",
+    "Fd": "Frontend",
+    "Gdv": "GameDev",
+    "Mob": "Mobile",
+    "DO": "DevOps",
+    "ML": "ML Engineer",
+    "UI": "UI/UX Designer",
+    "PM":"Project Manager",
+}
 
 
 class ProfileMenuCallback(CallbackData, prefix="profile"):
@@ -69,7 +82,7 @@ class ProfileMenuCallback(CallbackData, prefix="profile"):
     7. Навыки — стек технологий в рамках направления
     8. Ссылки — гит, резюме и прочие
     9. Готовность помогать новичкам — готов/не готов
-    10. Уровень навыков (дефолт — неизвестно) — не настраиваемый пользователем параметр, показывающий уровень скиллов
+    10. в какой компании работает
 
     # fio: str | None = None
     # email: str | None = None
@@ -79,14 +92,19 @@ class ProfileMenuCallback(CallbackData, prefix="profile"):
     # skills: list[str] | None = None
     # external_links: list[str] | None = None
     # mentor_status: bool | None = None
+    # company: str | None = None
     """
 
     action: PROFILE_ACTIONS | None = None
     field: PROFILE_EDITABLE_FIELD | None = None
 
 
-class MajorCallback(CallbackData, prefix="profile_major"):
+class MajorCallback(CallbackData, prefix="pf_mj"):
     value: str | None = None
+    confirms: str | None = None
+
+class MentorStatusCallback(CallbackData, prefix="mentor_status"):
+    ready: bool | None = None
 
 
 class ProfileAdminMenuCallback(CallbackData, prefix="profile_admin"):
@@ -97,7 +115,7 @@ def profile_menu_keyboard(is_admin: bool = False) -> types.InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.row(
         types.InlineKeyboardButton(
-            text=_("🤷‍♂️ изменить данные"),
+            text=_("🤷‍♂️ Изменить данные"),
             callback_data=ProfileMenuCallback(action="user_form").pack(),
         ),
     )
@@ -111,7 +129,7 @@ def profile_menu_keyboard(is_admin: bool = False) -> types.InlineKeyboardMarkup:
     if is_admin:
         builder.row(
             types.InlineKeyboardButton(
-                text=_("🦺 меню администратора"),
+                text=_("🦺 Меню администратора"),
                 callback_data=ProfileMenuCallback(action="admin_menu").pack(),
             )
         )
@@ -137,7 +155,7 @@ def field_selector_menu() -> types.InlineKeyboardMarkup:
     )
     builder.row(
         types.InlineKeyboardButton(
-            text=_("Группа"),
+            text=_("Учебная группа"),
             callback_data=ProfileMenuCallback(
                 action="editing", field="educational_group"
             ).pack(),
@@ -145,7 +163,7 @@ def field_selector_menu() -> types.InlineKeyboardMarkup:
     )
     builder.row(
         types.InlineKeyboardButton(
-            text=_("Ссылки на проекты"),
+            text=_("Ссылка на портфолио"),
             callback_data=ProfileMenuCallback(
                 action="editing", field="portfolio_link"
             ).pack(),
@@ -159,13 +177,13 @@ def field_selector_menu() -> types.InlineKeyboardMarkup:
     )
     builder.row(
         types.InlineKeyboardButton(
-            text=_("Стэк технологий"),
+            text=_("Навыки/Стэк технологий"),
             callback_data=ProfileMenuCallback(action="editing", field="skills").pack(),
         ),
     )
     builder.row(
         types.InlineKeyboardButton(
-            text=_("Ссылки на соц сети"),
+            text=_("Ссылки на соц. сети"),
             callback_data=ProfileMenuCallback(
                 action="editing", field="external_links"
             ).pack(),
@@ -179,6 +197,12 @@ def field_selector_menu() -> types.InlineKeyboardMarkup:
             ).pack(),
         ),
     )
+    builder.row(
+        types.InlineKeyboardButton(
+            text=_("Компания"),
+            callback_data=ProfileMenuCallback(action="editing", field="company").pack(),
+        ),
+    )
 
     builder.row(
         types.InlineKeyboardButton(
@@ -186,12 +210,6 @@ def field_selector_menu() -> types.InlineKeyboardMarkup:
             callback_data=ProfileMenuCallback(action=None).pack(),
         )
     )
-    # builder.row(
-    #     types.InlineKeyboardButton(
-    #         text=_("↩️ Назад"),
-    #         callback_data=ProfileMenuCallback(action=None).pack(),
-    #     )
-    # )
 
     return builder.as_markup()
 
@@ -213,14 +231,51 @@ def editing_keyboard(next_input: bool = False) -> types.InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def majors_keyboard() -> types.InlineKeyboardMarkup:
+def majors_keyboard(confirms: str = '') -> types.InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    for major in AVALIABLE_PROFESSIONS:
+    for key, major in AVALIABLE_PROFESSIONS.items():
+        text = f"✅ {major}" if key in confirms else major
+        value = f"add_{key}" if key not in confirms else f"rm_{key}"
         builder.row(
             types.InlineKeyboardButton(
-                text=major, callback_data=MajorCallback(value=major).pack()
+                text=text, callback_data=MajorCallback(value=value, confirms=confirms).pack()
             )
         )
+    builder.row(
+        types.InlineKeyboardButton(
+            text=_("↩️ Назад"),
+            callback_data=ProfileMenuCallback(action="user_form").pack(),
+        )
+    )
+    if confirms:
+        builder.add(
+            types.InlineKeyboardButton(
+                text=_("Подтвердить"),
+                callback_data=MajorCallback(value="save", confirms=confirms).pack(),
+            )
+        )
+    return builder.as_markup()
+
+def mentor_status_keyboard() -> types.InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.row(
+        types.InlineKeyboardButton(
+            text=_("✅ Готов помогать"),
+            callback_data=MentorStatusCallback(ready=True).pack(),
+        )
+    )
+    builder.row(
+        types.InlineKeyboardButton(
+            text=_("❌ Не готов помогать"),
+            callback_data=MentorStatusCallback(ready=False).pack(),
+        )
+    )
+    builder.row(
+        types.InlineKeyboardButton(
+            text=_("↩️ Назад"),
+            callback_data=ProfileMenuCallback(action="user_form").pack(),
+        )
+    )
     return builder.as_markup()
 
 
@@ -248,8 +303,8 @@ def admin_menu_keyboard() -> types.InlineKeyboardMarkup:
     )
     builder.row(
         types.InlineKeyboardButton(
-            text=_("Изменить статус"),
-            callback_data=ProfileAdminMenuCallback(action="change_status").pack(),
+            text=_("↩️ Назад"),
+            callback_data=MainMenuCallback(next_menu_prefix="profile").pack(),
         )
     )
     return builder.as_markup()

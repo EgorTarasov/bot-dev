@@ -104,6 +104,7 @@ class UserRepositoryBase(ABC):
         external_links: list[str] | None = None,
         skills: list[str] | None = None,
         mentor_status: bool = False,
+        company: str | None = None,
     ) -> None:
         """Обновления дополнительной ифнормации профиля"""
         raise NotImplemented

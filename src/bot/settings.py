@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     postgres_password: str
     postgres_port: int = 5432
     postgres_user: str
+    redis_host: str
+    redis_port: int = 6379
 
     secret: str
     # redis_host: str
@@ -26,3 +28,5 @@ class Settings(BaseSettings):
             f"{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
+    def redis_dsn(self) -> str:
+        return f"redis://{self.redis_host}:{self.redis_port}/0"

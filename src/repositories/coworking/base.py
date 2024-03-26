@@ -36,12 +36,12 @@ class CoworkingRepositoryBase(ABC):
             tg_id (int): id телеграмма, пользователя изменявшего статус подписки
             subscribed (bool): новый статус подписки на уведомления
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def get_coworking_notifications(self, tg_id: int) -> bool:
         """Проверяет подписал ли пользователь на уведомления об изменении статуса коворкинга"""
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def get_coworking_subscribed(self) -> list[int]:
@@ -50,7 +50,7 @@ class CoworkingRepositoryBase(ABC):
         Returns:
             list[int]: id подписанных пользователей
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def subscribe(self, tg_id: int) -> None:
